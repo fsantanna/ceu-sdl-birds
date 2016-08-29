@@ -1,0 +1,110 @@
+#define PI 3.14
+
+#include "c.ceu"
+#include "sdl/sdl.ceu"
+
+var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
+
+#define PI 3.14
+
+code/tight Intersects (var& SDL_Rect rct1, var& SDL_Rect rct2) => bool
+do
+    escape rct1.x+rct1.w/2 >= rct2.x-rct2.w/2 and
+           rct1.x-rct1.w/2 <= rct2.x+rct2.w/2 and
+           rct1.y+rct1.h/2 >= rct2.y-rct2.h/2 and
+           rct1.y-rct1.h/2 <= rct2.y+rct2.h/2;
+end
+
+var& _SDL_Renderer ren;
+watching SDL_go("Birds - 10 (fall)", 640,480, bg) => (ren)
+do
+    var& SDL_Texture img_up, img_dn;
+    spawn SDL_open_texture(&ren, "res/clumsy_up.png") => (img_up);
+    spawn SDL_open_texture(&ren, "res/clumsy_dn.png") => (img_dn);
+
+    code/await Bird (var int y, var int speed)
+                        => (var&? SDL_Rect rct, event&? void go_collided)
+                            => void
+    do
+        var SDL_Rect rct_ = val SDL_Rect(20,y, 50,45);
+        rct = &rct_;
+
+        event void go_collided_;
+        go_collided = &go_collided_;
+
+        var float sin = 0;
+        par/or do
+            var int out = _;
+            do/out
+                watching go_collided_ do
+                    var int y = rct_.y;
+                    var float x = rct_.x;
+                    var int dt;
+                    every dt in SDL_DT do
+                        var float v = dt*speed;
+                        x = x + v/1000;
+                        rct_.x = x as int;
+                        rct_.y = y + speed/5*_sin(sin);
+                        sin = sin + PI*v/100000;
+                        if rct_.x > 580 then
+                            escape/out;
+                        end
+                    end
+                end
+
+                var float y = rct_.y;
+                var int dt;
+                every dt in SDL_DT do
+                    y = y + dt*0.5;
+                    rct_.y = y as int;
+                    if rct_.y >= 400 then
+                        rct_.y = 400;
+                        break;
+                    end
+                end
+            end
+        with
+            every SDL_REDRAW do
+                if ((((sin+PI/2)/PI) as int) % 2) == 0 then
+                    _SDL_RenderCopy(&&outer.ren, &&outer.img_dn.tex, null,
+                                    &&rct_ as _SDL_Rect&&);
+                else
+                    _SDL_RenderCopy(&&outer.ren, &&outer.img_up.tex, null,
+                                    &&rct_ as _SDL_Rect&&);
+                end
+            end
+        end
+    end
+
+    loop do
+        watching SDL_MOUSEBUTTONDOWN do
+            pool[] Bird birds;
+            par do
+                every 500ms do
+                    spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;
+                end
+            with
+                every SDL_DT do
+                    var&? SDL_Rect rct1;
+                    event&? void col1;
+                    loop (rct1,col1) in birds do
+                        var&? SDL_Rect rct2;
+                        event&? void col2;
+                        loop (rct2,col2) in birds do
+                            if (&&rct1! as usize)<(&&rct2! as usize)
+                                and (call Intersects(&rct1!,&rct2!))
+                            then
+                                emit col1!;
+                                emit col2!;
+                                break;
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+escape 0;
+
