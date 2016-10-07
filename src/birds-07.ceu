@@ -1,11 +1,9 @@
-#define PI 3.14
-
 #include "c.ceu"
 #include "sdl/sdl.ceu"
 
-var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
-
 #define PI 3.14
+
+var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
 watching SDL_go("Birds - 07 (bounded)", 640,480, bg) => (ren)

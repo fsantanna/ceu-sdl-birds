@@ -1,11 +1,9 @@
-#define PI 3.14
-
 #include "c.ceu"
 #include "sdl/sdl.ceu"
 
-var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
-
 #define PI 3.14
+
+var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 code/tight Intersects (var& SDL_Rect rct1, var& SDL_Rect rct2) => bool
 do
