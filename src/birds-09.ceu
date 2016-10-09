@@ -34,14 +34,14 @@ do
         par/or do
             await go_collided_;
         with
-            var int y = rct_.y;
+            var int yy = rct_.y;
             var float x = rct_.x;
             var int dt;
             every dt in SDL_DT do
                 var float v = dt*speed;
                 x = x + v/1000;
                 rct_.x = x as int;
-                rct_.y = y + speed/5*_sin(sin);
+                rct_.y = yy + speed/5*_sin(sin);
                 sin = sin + PI*v/100000;
                 if rct_.x > 580 then
                     break;

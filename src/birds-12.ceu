@@ -36,14 +36,14 @@ do
             var int out = _;
             do/out
                 watching go_collided_ do
-                    var int y = rct_.y;
+                    var int yy = rct_.y;
                     var float x = rct_.x;
                     var int dt;
                     every dt in SDL_DT do
                         var float v = dt*speed;
                         x = x + v/1000;
                         rct_.x = x as int;
-                        rct_.y = y + speed/5*_sin(sin);
+                        rct_.y = yy + speed/5*_sin(sin);
                         sin = sin + PI*v/100000;
                         if rct_.x > 580 then
                             escape/out;
@@ -51,11 +51,11 @@ do
                     end
                 end
 
-                var float y = rct_.y;
+                var float yy = rct_.y;
                 var int dt;
                 every dt in SDL_DT do
-                    y = y + dt*0.5;
-                    rct_.y = y as int;
+                    yy = yy + dt*0.5;
+                    rct_.y = yy as int;
                     if rct_.y >= 400 then
                         rct_.y = 400;
                         break;
