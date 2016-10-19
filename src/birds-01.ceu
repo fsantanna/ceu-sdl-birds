@@ -1,7 +1,3 @@
-#if 0
-ceu --pre --pre-args="-I/data/ceu/ceu/include -I/data/ceu/ceu-sdl/include" --pre-input="src/birds-01.ceu" --ceu --env --env-header=/data/ceu/ceu/env/header.h --env-main=/data/ceu/ceu/env/main.c --env-output=/tmp/x.c --cc --cc-args="-lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx -lm -llua5.3 -g" --cc-output=/tmp/x.exe
-#endif
-
 #include "c.ceu"
 #include "sdl/sdl.ceu"
 
@@ -10,13 +6,13 @@ ceu --pre --pre-args="-I/data/ceu/ceu/include -I/data/ceu/ceu-sdl/include" --pre
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 01 (code/await)", 640,480, bg) => (ren)
+watching SDL_go("Birds - 01 (code/await)", 640,480, bg) -> (ren)
 do
     var& SDL_Texture img_up, img_dn;
-    spawn SDL_open_texture(&ren, "res/clumsy_up.png") => (img_up);
-    spawn SDL_open_texture(&ren, "res/clumsy_dn.png") => (img_dn);
+    spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (img_up);
+    spawn SDL_open_texture(&ren, "res/clumsy_dn.png") -> (img_dn);
 
-    code/await Bird (var int y, var int speed) => FOREVER
+    code/await Bird (var int y, var int speed) -> FOREVER
     do
         var SDL_Rect rct = val SDL_Rect(20,y, 50,45);
 
