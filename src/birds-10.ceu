@@ -14,7 +14,7 @@ do
 end
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 10 (fall)", 640,480, bg) -> (&ren)
+watching SDL_go("Birds - 10 (iterator)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
     spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
@@ -32,33 +32,19 @@ do
 
         var float sin = 0;
         par/or do
-            var int out = _;
-            do/out
-                watching go_collided_ do
-                    var int yy = rct_.y;
-                    var float x = rct_.x;
-                    var int dt;
-                    every dt in SDL_DT do
-                        var float v = dt*speed;
-                        x = x + v/1000;
-                        rct_.x = x as int;
-                        rct_.y = yy + speed/5*_sin(sin);
-                        sin = sin + PI*v/100000;
-                        if rct_.x > 580 then
-                            escape/out;
-                        end
-                    end
-                end
-
-                var float yy = rct_.y;
-                var int dt;
-                every dt in SDL_DT do
-                    yy = yy + dt*0.5;
-                    rct_.y = yy as int;
-                    if rct_.y >= 400 then
-                        rct_.y = 400;
-                        break;
-                    end
+            await go_collided_;
+        with
+            var int yy = rct_.y;
+            var float x = rct_.x;
+            var int dt;
+            every dt in SDL_DT do
+                var float v = dt*speed;
+                x = x + v/1000;
+                rct_.x = x as int;
+                rct_.y = yy + speed/5*_sin(sin);
+                sin = sin + PI*v/100000;
+                if rct_.x > 580 then
+                    break;
                 end
             end
         with

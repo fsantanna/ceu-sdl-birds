@@ -27,4 +27,22 @@ all:
 		echo;                                                               \
 	done
 
+all_:
+	ceu --pre --pre-args="-I$(CEU_DIR)/include -I$(CEU_SDL_DIR)/include" \
+	          --pre-input=src/all.ceu                                    \
+	    --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass         \
+	    --env --env-types=$(CEU_DIR)/env/types.h                         \
+	          --env-threads=$(CEU_DIR)/env/threads.h                     \
+	          --env-main=$(CEU_DIR)/env/main.c                           \
+	          --env-output=/tmp/birds-all.c \
+	    --cc --cc-args="-lm -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
+	         --cc-output=/tmp/birds-all
+	/tmp/birds-all
+
+all__:
+	ceu --cc --cc-args="-lm -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
+	         --cc-input=/tmp/birds-all.c \
+	         --cc-output=/tmp/birds-all
+	/tmp/birds-all
+
 .PHONY: all

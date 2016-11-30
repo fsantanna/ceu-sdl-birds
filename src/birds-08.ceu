@@ -6,7 +6,7 @@
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 08 (pool-scope)", 640,480, bg) -> (&ren)
+watching SDL_go("Birds - 08 (natural termination)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
     spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
@@ -44,13 +44,10 @@ do
         end
     end
 
-    loop do
-        watching SDL_MOUSEBUTTONDOWN do
-            pool[] Bird birds;
-            every 1s do
-                spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;
-            end
-        end
+    pool[] Bird birds;
+
+    every 1s do
+        spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;
     end
 end
 

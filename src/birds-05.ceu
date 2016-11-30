@@ -6,7 +6,7 @@
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 05 (break)", 640,480, bg) -> (&ren)
+watching SDL_go("Birds - 05 (unbounded)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
     spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
@@ -27,9 +27,6 @@ do
                 rct.x = x as int;
                 rct.y = yy + speed/5*_sin(sin);
                 sin = sin + PI*v/100000;
-                if rct.x > 580 then
-                    break;
-                end
             end
         with
             every SDL_REDRAW do
@@ -52,4 +49,3 @@ do
 end
 
 escape 0;
-

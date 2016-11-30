@@ -6,18 +6,18 @@
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 07 (bounded)", 640,480, bg) -> (&ren)
+watching SDL_go("Birds - 07 (break/bounded)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
     spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
     spawn SDL_open_texture(&ren, "res/clumsy_dn.png") -> (&img_dn);
 
-    code/await Bird (var int y, var int speed) -> void
+    code/await Bird (var int y, var int speed) -> FOREVER
     do
         var SDL_Rect rct = val SDL_Rect(20,y, 50,45);
 
         var float sin = 0;
-        par/or do
+        par do
             var int yy = rct.y;
             var float x = rct.x;
             var int dt;
@@ -44,7 +44,7 @@ do
         end
     end
 
-    pool[2] Bird birds;
+    pool[5] Bird birds;
 
     every 1s do
         spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;

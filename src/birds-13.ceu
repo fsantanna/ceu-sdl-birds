@@ -14,11 +14,12 @@ do
 end
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 12 (blink)", 640,480, bg) -> (&ren)
+watching SDL_go("Birds - 13 (pause)", 640,480, bg) -> (&ren)
 do
-    var& SDL_Texture img_up, img_dn;
+    var& SDL_Texture img_up, img_dn, img_pause;
     spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
     spawn SDL_open_texture(&ren, "res/clumsy_dn.png") -> (&img_dn);
+    spawn SDL_open_texture(&ren, "res/pause.png")     -> (&img_pause);
 
     code/await Bird (var int y, var int speed)
                         -> (var&? SDL_Rect rct, event&? void go_collided)
@@ -86,35 +87,56 @@ do
         end
     end
 
-    loop do
-        watching SDL_MOUSEBUTTONDOWN do
-            pool[] Bird birds;
-            par do
-                every 500ms do
-                    spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;
-                end
-            with
-                every SDL_DT do
-                    var&? SDL_Rect rct1;
-                    event&? void col1;
-                    loop (rct1,col1) in birds do
-                        var&? SDL_Rect rct2;
-                        event&? void col2;
-                        loop (rct2,col2) in birds do
-                            if (&&rct1! as usize)<(&&rct2! as usize)
-                                and (call Intersects(&rct1!,&rct2!))
-                            then
-                                emit col1!;
-                                emit col2!;
-                                break;
+    event bool go_pause;
+    par do
+        pause/if go_pause do
+            loop do
+                watching SDL_MOUSEBUTTONDOWN do
+                    pool[] Bird birds;
+                    par do
+                        every 500ms do
+                            spawn Bird(20+_rand()%350, 100+_rand()%100) in birds;
+                        end
+                    with
+                        every SDL_DT do
+                            var&? SDL_Rect rct1;
+                            event&? void col1;
+                            loop (rct1,col1) in birds do
+                                var&? SDL_Rect rct2;
+                                event&? void col2;
+                                loop (rct2,col2) in birds do
+                                    if (&&rct1! as usize)<(&&rct2! as usize)
+                                        and (call Intersects(&rct1!,&rct2!))
+                                    then
+                                        emit col1!;
+                                        emit col2!;
+                                        break;
+                                    end
+                                end
                             end
                         end
                     end
                 end
             end
         end
+    with
+        loop do
+            var _SDL_KeyboardEvent&& key1 = await SDL_KEYDOWN
+                                            until key1:keysym.sym==_SDLK_p;
+            emit go_pause(true);
+            par/or do
+                var SDL_Rect rct = val SDL_Rect(150,80,309,320);
+                every SDL_REDRAW do
+                    _SDL_RenderCopy(&&ren, &&img_pause.tex, null,
+                                    &&rct as _SDL_Rect&&);
+                end
+            with
+                var _SDL_KeyboardEvent&& key2 = await SDL_KEYDOWN
+                                                until key2:keysym.sym==_SDLK_p;
+            end
+            emit go_pause(false);
+        end
     end
 end
 
 escape 0;
-
