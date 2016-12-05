@@ -45,10 +45,12 @@ loop do
                                               key:keysym.sym==_SDLK_UP then
                     ex = ex;
                     break;
-                else/if key:keysym.sym==_SDLK_COMMA or key:keysym.sym==_SDLK_LEFT then
+                //else/if key:keysym.sym==_SDLK_COMMA or key:keysym.sym==_SDLK_LEFT then
+                else/if key:keysym.sym==_SDLK_COMMA then
                     ex = ex - 1;
                     break;
-                else/if key:keysym.sym==_SDLK_PERIOD or key:keysym.sym==_SDLK_RIGHT then
+                //else/if key:keysym.sym==_SDLK_PERIOD or key:keysym.sym==_SDLK_RIGHT then
+                else/if key:keysym.sym==_SDLK_PERIOD then
                     ex = ex + 1;
                     break;
                 end

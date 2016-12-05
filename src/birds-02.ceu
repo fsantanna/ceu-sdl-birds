@@ -6,11 +6,11 @@
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
 var& _SDL_Renderer ren;
-watching SDL_go("Birds - 02 (scope)", 640,480, bg) -> (&ren)
+watching SDL_Init("Birds - 02 (scope)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
-    spawn SDL_open_texture(&ren, "res/clumsy_up.png") -> (&img_up);
-    spawn SDL_open_texture(&ren, "res/clumsy_dn.png") -> (&img_dn);
+    spawn SDL_Open_Texture(&ren, "res/clumsy_up.png") -> (&img_up);
+    spawn SDL_Open_Texture(&ren, "res/clumsy_dn.png") -> (&img_dn);
 
     code/await Bird (var int y, var int speed) -> FOREVER
     do
