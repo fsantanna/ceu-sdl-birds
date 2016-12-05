@@ -9,8 +9,8 @@ var& _SDL_Renderer ren;
 watching SDL_Init("Birds - 04 (bounded)", 640,480, bg) -> (&ren)
 do
     var& SDL_Texture img_up, img_dn;
-    spawn SDL_Open_Texture(&ren, "res/clumsy_up.png") -> (&img_up);
-    spawn SDL_Open_Texture(&ren, "res/clumsy_dn.png") -> (&img_dn);
+    spawn SDL_Open_Image(&ren, "res/clumsy_up.png") -> (&img_up);
+    spawn SDL_Open_Image(&ren, "res/clumsy_dn.png") -> (&img_dn);
 
     code/await Bird (var int y, var int speed) -> FOREVER
     do
