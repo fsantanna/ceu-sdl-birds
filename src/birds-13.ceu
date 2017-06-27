@@ -16,11 +16,11 @@ end
 var&? SDL_Init sdl = spawn SDL_Init("Birds - 13 (pause)", 640,480, bg);
 watching sdl do
     var& SDL_Open_Image img_up =
-        spawn SDL_Open_Image(&sdl!.ren, "res/clumsy_up.png");
+        spawn SDL_Open_Image(&sdl.ren, "res/clumsy_up.png");
     var& SDL_Open_Image img_dn =
-        spawn SDL_Open_Image(&sdl!.ren, "res/clumsy_dn.png");
+        spawn SDL_Open_Image(&sdl.ren, "res/clumsy_dn.png");
     var& SDL_Open_Image img_pause =
-        spawn SDL_Open_Image(&sdl!.ren, "res/pause.png");
+        spawn SDL_Open_Image(&sdl.ren, "res/pause.png");
 
     code/await Bird (var int y, var int speed)
                         -> (var SDL_Rect rct, event void go_collided)
@@ -73,10 +73,10 @@ watching sdl do
             pause/if go_invisible do
                 every SDL_REDRAW do
                     if ((((sin+PI/2)/PI) as int) % 2) == 0 then
-                        _SDL_RenderCopy(&&outer.sdl!.ren, &&outer.img_dn.tex.tex, null,
+                        _SDL_RenderCopy(&&outer.sdl.ren, &&outer.img_dn.tex.tex, null,
                                         &&rct as _SDL_Rect&&);
                     else
-                        _SDL_RenderCopy(&&outer.sdl!.ren, &&outer.img_up.tex.tex, null,
+                        _SDL_RenderCopy(&&outer.sdl.ren, &&outer.img_up.tex.tex, null,
                                         &&rct as _SDL_Rect&&);
                     end
                 end
@@ -122,7 +122,7 @@ watching sdl do
             par/or do
                 var SDL_Rect rct = val SDL_Rect(150,80,309,320);
                 every SDL_REDRAW do
-                    _SDL_RenderCopy(&&sdl!.ren, &&img_pause.tex, null,
+                    _SDL_RenderCopy(&&sdl.ren, &&img_pause.tex.tex, null,
                                     &&rct as _SDL_Rect&&);
                 end
             with
