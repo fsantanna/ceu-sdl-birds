@@ -12,17 +12,17 @@ watching sdl do
     var& SDL_Open_Image img_dn =
         spawn SDL_Open_Image(&sdl.ren, "res/clumsy_dn.png");
 
-    code/await Bird (var int y, var int speed) -> void
+    code/await Bird (var int y, var int speed) -> none
     do
         var SDL_Rect rct = val SDL_Rect(20,y, 50,45);
 
-        var float sin = 0;
+        var real sin = 0;
         par/or do
             var int yy = rct.y;
-            var float x = rct.x;
+            var real x = rct.x;
             var int dt;
             every dt in SDL_DT do
-                var float v = dt*speed;
+                var real v = dt*speed;
                 x = x + v/1000;
                 rct.x = x as int;
                 rct.y = yy + speed/5*_sin(sin);

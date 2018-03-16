@@ -1,5 +1,4 @@
-CEU_DIR     = $(error set absolute path to "<ceu>" repository)
-CEU_SDL_DIR = $(error set absolute path to "<ceu-sdl>" repository)
+include Makefile.dirs
 
 each:
 	for i in src/birds-*.ceu; do                                            \
@@ -12,6 +11,9 @@ each:
 	    ceu --pre --pre-args="-I$(CEU_DIR)/include -I$(CEU_SDL_DIR)/include" \
 	              --pre-input=$$i                                           \
 	        --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass        \
+	        --ceu-features-dynamic=true \
+	        --ceu-features-pool=true \
+	        --ceu-features-pause=true \
 	        --env --env-types=$(CEU_DIR)/env/types.h                        \
 	              --env-threads=$(CEU_DIR)/env/threads.h                    \
 	              --env-main=$(CEU_DIR)/env/main.c                          \
@@ -30,7 +32,7 @@ each:
 all:
 	ceu --pre --pre-args="-I$(CEU_DIR)/include -I$(CEU_SDL_DIR)/include" \
 	          --pre-input=src/all.ceu                                    \
-	    --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass         \
+	    --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass --ceu-line-directives=false         \
 	    --env --env-types=$(CEU_DIR)/env/types.h                         \
 	          --env-threads=$(CEU_DIR)/env/threads.h                     \
 	          --env-main=$(CEU_DIR)/env/main.c                           \
