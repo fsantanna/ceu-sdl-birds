@@ -1,7 +1,7 @@
 include Makefile.dirs
 
 each:
-	for i in src/birds-*.ceu; do                                            \
+	for i in src/birds-10.ceu; do                                            \
 		echo;                                                               \
 		echo "###############################################";             \
 		echo File: "$$i -> /tmp/$$(basename $$i .ceu)";	                    \
@@ -17,7 +17,8 @@ each:
 	        --env --env-types=$(CEU_DIR)/env/types.h                        \
 	              --env-threads=$(CEU_DIR)/env/threads.h                    \
 	              --env-main=$(CEU_DIR)/env/main.c                          \
-	        --cc --cc-args="-lm -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
+	              --env-output=/tmp/_ceu.c \
+	        --cc --cc-args="-lm -g -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
 	             --cc-output=/tmp/$$(basename $$i .ceu);                     \
 		/tmp/$$(basename $$i .ceu);	                                        \
 		echo ">>> OK";                                                      \
@@ -32,18 +33,15 @@ each:
 all:
 	ceu --pre --pre-args="-I$(CEU_DIR)/include -I$(CEU_SDL_DIR)/include" \
 	          --pre-input=src/all.ceu                                    \
-	    --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass --ceu-line-directives=false         \
+	    --ceu --ceu-err-unused=pass --ceu-err-uninitialized=pass         \
+	          --ceu-features-dynamic=true \
+	          --ceu-features-pool=true \
+	          --ceu-features-pause=true \
 	    --env --env-types=$(CEU_DIR)/env/types.h                         \
 	          --env-threads=$(CEU_DIR)/env/threads.h                     \
 	          --env-main=$(CEU_DIR)/env/main.c                           \
 	          --env-output=/tmp/birds-all.c \
 	    --cc --cc-args="-lm -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
-	         --cc-output=/tmp/birds-all
-	/tmp/birds-all
-
-all_:
-	ceu --cc --cc-args="-lm -llua5.3 -lpthread -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lSDL2_gfx" \
-	         --cc-input=/tmp/birds-all.c \
 	         --cc-output=/tmp/birds-all
 	/tmp/birds-all
 
