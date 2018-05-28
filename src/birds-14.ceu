@@ -5,7 +5,7 @@
 
 var SDL_Color bg = val SDL_Color(0x00,0x00,0x00,0xFF);
 
-code/tight Intersects (var& SDL_Rect rct1, var& SDL_Rect rct2) -> bool
+code/call Intersects (var& SDL_Rect rct1, var& SDL_Rect rct2) -> bool
 do
     escape rct1.x+rct1.w/2 >= rct2.x-rct2.w/2 and
            rct1.x-rct1.w/2 <= rct2.x+rct2.w/2 and
