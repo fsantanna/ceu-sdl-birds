@@ -1,4 +1,4 @@
-include Makefile.dirs
+include Makefile.conf
 
 each:
 	for i in src/birds-*.ceu; do                                            \
